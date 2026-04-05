@@ -1,0 +1,92 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the application",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "plan": { "type": "string", "enum": ["free", "pro", "business"] },
+        "defaultWhatsAppNumber": { "type": "string" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "required": ["uid", "email", "plan", "createdAt"]
+    },
+    "Funnel": {
+      "title": "Funnel",
+      "description": "A WhatsApp funnel created by a user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "slug": { "type": "string" },
+        "whatsappNumber": { "type": "string" },
+        "whatsappMessageTemplate": { "type": "string" },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "type": { "type": "string", "enum": ["welcome", "question", "input", "cta"] },
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "options": { "type": "array", "items": { "type": "string" } },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "label": { "type": "string" },
+                    "type": { "type": "string", "enum": ["text", "email", "tel"] },
+                    "required": { "type": "boolean" }
+                  }
+                }
+              },
+              "buttonText": { "type": "string" }
+            }
+          }
+        },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" },
+        "views": { "type": "number" },
+        "leads": { "type": "number" }
+      },
+      "required": ["id", "userId", "name", "slug", "whatsappNumber", "createdAt"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "A lead captured through a funnel",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "funnelId": { "type": "string" },
+        "userId": { "type": "string" },
+        "data": { "type": "object" },
+        "createdAt": { "type": "timestamp" }
+      },
+      "required": ["id", "funnelId", "userId", "data", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "funnels/{funnelId}": {
+      "schema": "Funnel",
+      "description": "Funnels created by users"
+    },
+    "leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Leads captured from funnels"
+    }
+  }
+}
