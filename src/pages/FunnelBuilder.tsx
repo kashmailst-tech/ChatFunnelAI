@@ -7,6 +7,25 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Save, Plus, Trash2, ArrowLeft, Smartphone, Monitor } from 'lucide-react';
 
+interface FunnelStep {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  buttonText: string;
+  options?: string[];
+  fields?: { name: string; label?: string; type: string; required: boolean }[];
+}
+
+interface Funnel {
+  name: string;
+  slug: string;
+  whatsappNumber: string;
+  whatsappMessageTemplate: string;
+  isActive: boolean;
+  steps: FunnelStep[];
+}
+
 export default function FunnelBuilder() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -16,7 +35,7 @@ export default function FunnelBuilder() {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile');
 
-  const [funnel, setFunnel] = useState({
+  const [funnel, setFunnel] = useState<Funnel>({
     name: 'My New Funnel',
     slug: '',
     whatsappNumber: '',

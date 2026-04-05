@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, PlusCircle, List, Users, Settings as SettingsIcon, LogOut, MessageCircle, CreditCard, BarChart2, LayoutTemplate } from 'lucide-react';
 import { auth } from '../lib/firebase';
+import AIAssistant from './AIAssistant';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -88,6 +89,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {children}
         </div>
       </main>
+      <AIAssistant />
     </div>
   );
 }

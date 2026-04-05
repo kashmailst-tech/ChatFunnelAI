@@ -30,7 +30,35 @@ export default function Billing() {
   };
 
   const handleUpgrade = (plan: string) => {
-    alert(`Stripe/Razorpay integration pending for ${plan} plan. This will open a checkout session.`);
+    // In a real application, you would call your backend to create an order
+    // and get the order ID. Here we simulate the Razorpay checkout process.
+    
+    const options = {
+      key: "rzp_test_YOUR_KEY_ID", // Replace with your Razorpay Key ID
+      amount: plan === 'pro' ? 2900 : 9900, // Amount is in currency subunits (e.g. 2900 paise = INR 29)
+      currency: "USD", // Or INR
+      name: "Chat Funnel AI",
+      description: `Upgrade to ${plan} plan`,
+      image: "https://your-logo-url.com/logo.png",
+      // order_id: "order_9A33XWu170gUtm", // This should come from your backend
+      handler: function (response: any) {
+        alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+        // Here you would typically verify the payment on your backend
+        // and update the user's plan in Firestore
+      },
+      prefill: {
+        name: user?.displayName || "User",
+        email: user?.email || "user@example.com",
+        contact: "9999999999"
+      },
+      theme: {
+        color: "#4f46e5" // Indigo-600 to match the brand
+      }
+    };
+    
+    // @ts-ignore
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   if (loading) return <DashboardLayout><div className="flex justify-center items-center h-full">Loading...</div></DashboardLayout>;
